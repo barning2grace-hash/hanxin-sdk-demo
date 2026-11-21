@@ -58,7 +58,7 @@ print(sdk.decode_file("test-images/curved.jpg", time_limit_ms=2000))
 ### C（Linux x64 / ARM64，Windows 同样适用）
 
 ```bash
-cmake -S examples/c -B build -DSINOMATRIX_ROOT=$HOME/SinoMatrix-SDK-0.4.2-Linux-arm64
+cmake -S examples/c -B build -DSINOMATRIX_ROOT=$HOME/SinoMatrix-SDK-0.4.3-Linux-arm64
 cmake --build build
 ./build/decode_pgm license.lic photo.pgm
 ```

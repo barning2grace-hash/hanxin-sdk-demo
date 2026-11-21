@@ -1,0 +1,11 @@
+# 不要把运行库、授权文件和申请文件提交到仓库
+*.dll
+*.so
+*.lic
+*.req
+bin/
+obj/
+build/
+__pycache__/
+hanxin.png
+*.pgm

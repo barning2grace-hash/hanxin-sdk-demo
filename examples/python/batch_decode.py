@@ -14,4 +14,5 @@ for path in sorted(Path(sys.argv[2]).glob("*")):
     start = time.perf_counter()
     text = sdk.decode_file(str(path), time_limit_ms=2000)
     ms = (time.perf_counter() - start) * 1000
-    print(f"{path.name}\t{ms:.0f} ms\t{text if text is not None else '未识别'}")
+    shown = text.replace("\n", " / ") if text is not None else "未识别"   # 多行内容显示在一行
+    print(f"{path.name}\t{ms:.0f} ms\t{shown}")

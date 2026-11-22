@@ -1,12 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
 project(SinoMatrixExamples C)
-# 指向解压后的 SDK 目录，例如：cmake -S . -B build -DSINOMATRIX_ROOT=$HOME/SinoMatrix-SDK-0.4.2-Linux-arm64
+# 指向解压后的 SDK 目录，例如：cmake -S . -B build -DSINOMATRIX_ROOT=$HOME/SinoMatrix-SDK-0.5.0-Linux-arm64
 set(SINOMATRIX_ROOT "" CACHE PATH "解压后的 SinoMatrix SDK 目录")
 if(NOT SINOMATRIX_ROOT)
   message(FATAL_ERROR "请用 -DSINOMATRIX_ROOT=<SDK 目录> 指定解压后的 SDK")
 endif()
 find_library(SINOMATRIX_LIB SinoMatrix PATHS "${SINOMATRIX_ROOT}/lib" NO_DEFAULT_PATH REQUIRED)
-foreach(example quickstart decode_pgm)
+foreach(example quickstart decode_pgm decode_bgr)
   add_executable(${example} ${example}.c)
   target_include_directories(${example} PRIVATE "${SINOMATRIX_ROOT}/include")
   target_link_libraries(${example} PRIVATE "${SINOMATRIX_LIB}")

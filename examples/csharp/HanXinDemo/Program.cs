@@ -14,39 +14,24 @@ if (args.Length < 2)
 HanXin.LoadLicense(args[0]);                      // 程序启动时调用一次
 Console.WriteLine(HanXin.Version);
 
-// 1. 识别：读图 → 转 8 位灰度 → Decode
+// 1. 识别：Bitmap 像素直接传给 SDK（0.5.0 起支持彩色，不用自己转灰度）
 using (var bitmap = new Bitmap(args[1]))
 {
-    byte[] gray = ToGray(bitmap);
-    var watch = System.Diagnostics.Stopwatch.StartNew();
-    string? text = HanXin.Decode(gray, bitmap.Width, bitmap.Height, bitmap.Width, timeLimitMs: 2000);
-    Console.WriteLine(text is null ? "未识别" : $"识别结果（{watch.ElapsedMilliseconds} ms）：{text}");
+    var data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
+    try
+    {
+        var watch = System.Diagnostics.Stopwatch.StartNew();
+        // Format24bppRgb 在内存里是 B、G、R 顺序，对应 SmPixelFormat.Bgr24
+        string? text = HanXin.Decode(data.Scan0, data.Width, data.Height, data.Stride, SmPixelFormat.Bgr24, timeLimitMs: 2000);
+        Console.WriteLine(text is null ? "未识别" : $"识别结果（{watch.ElapsedMilliseconds} ms）：{text}");
+    }
+    finally { bitmap.UnlockBits(data); }
 }
 
 // 2. 生成：文本 → 8 位灰度 → 保存 PNG
 byte[] pixels = HanXin.Encode("追溯码：SMHX-2026-000123\n产地：浙江杭州", out int width, out int height);
 SaveGrayPng(pixels, width, height, "hanxin.png");
 Console.WriteLine($"已生成 hanxin.png（{width}×{height}）");
-
-// 任意格式的 Bitmap 转成紧凑排列的 8 位灰度（每行 width 字节）
-static byte[] ToGray(Bitmap bitmap)
-{
-    int w = bitmap.Width, h = bitmap.Height;
-    var data = bitmap.LockBits(new Rectangle(0, 0, w, h), ImageLockMode.ReadOnly, PixelFormat.Format24bppRgb);
-    try
-    {
-        var row = new byte[w * 3];
-        var gray = new byte[w * h];
-        for (int y = 0; y < h; y++)
-        {
-            Marshal.Copy(data.Scan0 + y * data.Stride, row, 0, row.Length);
-            for (int x = 0; x < w; x++)            // 24 位像素按 B、G、R 排列
-                gray[y * w + x] = (byte)((row[x * 3] * 29 + row[x * 3 + 1] * 150 + row[x * 3 + 2] * 77) >> 8);
-        }
-        return gray;
-    }
-    finally { bitmap.UnlockBits(data); }
-}
 
 static void SaveGrayPng(byte[] gray, int w, int h, string path)
 {

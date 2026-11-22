@@ -10,7 +10,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="SinoMatrix.HanXin" Version="0.4.2" />
+    <PackageReference Include="SinoMatrix.HanXin" Version="0.5.0" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
   </ItemGroup>
 </Project>

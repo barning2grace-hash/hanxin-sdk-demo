@@ -51,6 +51,9 @@ from sinomatrix import SinoMatrix          # examples/python/sinomatrix.py，读
 sdk = SinoMatrix()                          # 加载同目录的 SinoMatrix.dll / libSinoMatrix.so
 sdk.load_license("license.lic")
 print(sdk.decode_file("test-images/curved.jpg", time_limit_ms=2000))
+
+import cv2                                  # 0.5.0 起：OpenCV 彩色图直接传，不用转灰度
+print(sdk.decode_array(cv2.imread("test-images/curved.jpg"), time_limit_ms=2000))
 ```
 
 还有批量识别、生成 PNG、OpenCV 画面识别：[examples/python](examples/python)。
@@ -62,6 +65,20 @@ cmake -S examples/c -B build -DSINOMATRIX_ROOT=$HOME/SinoMatrix-SDK-0.4.3-Linux-
 cmake --build build
 ./build/decode_pgm license.lic photo.pgm
 ```
+
+## 支持的图像格式（0.5.0）
+
+`SinoMatrix_HanXinDecodeImage` 直接接收以下像素格式，任意行跨度，设置 ROI 时只转换框内像素：
+
+| 格式 | 常见来源 |
+| --- | --- |
+| Gray8 / Gray16 | 灰度图、10/12/16 位工业相机、16 位 PNG/TIFF |
+| Rgb24 / Bgr24 | Pillow、OpenCV、Windows 24 位位图 |
+| Rgba32 / Bgra32 / Argb32 / Abgr32 | Android Bitmap、Windows 32 位位图、iOS 32BGRA |
+| Yuv420（只传 Y 平面） | NV12、NV21、I420、Android YUV_420_888、iOS 420YpCbCr8BiPlanar |
+| Yuyv / Uyvy | USB（UVC）摄像头 |
+
+黄、青、红等彩色油墨印在浅色底上的码，可选“最暗通道”转换（C# `SmColorConversion.MinChannel`，Python `color="min"`）。C 示例见 [examples/c/decode_bgr.c](examples/c/decode_bgr.c)。
 
 ## 申请试用
 

@@ -61,7 +61,7 @@ print(sdk.decode_array(cv2.imread("test-images/curved.jpg"), time_limit_ms=2000)
 ### C（Linux x64 / ARM64，Windows 同样适用）
 
 ```bash
-cmake -S examples/c -B build -DSINOMATRIX_ROOT=$HOME/SinoMatrix-SDK-0.4.3-Linux-arm64
+cmake -S examples/c -B build -DSINOMATRIX_ROOT=$HOME/SinoMatrix-SDK-0.5.0-Linux-arm64
 cmake --build build
 ./build/decode_pgm license.lic photo.pgm
 ```
@@ -92,11 +92,11 @@ cmake --build build
 
 | 授权 | 价格 |
 | --- | --- |
-| 开发版，1 台登记设备 | ¥399 |
-| 运行时授权包，10 台 | ¥1,999 |
-| 运行时授权包，100 台 | ¥9,800 |
+| 开发版，1 台设备 | ¥199（首发价，2026-12-31 后 ¥299） |
+| 小批量，5 台 | ¥699 |
+| 项目版，100 台（同一项目或最终客户） | ¥2,980 |
 
-以上为 Windows x64 价格（含 NuGet 包在 Windows 上使用），已购版本永久使用，90 天安装与缺陷支持。Linux 价格、OEM、源码买断请联系确认。下单在[淘宝](https://item.taobao.com/item.htm?id=1094008438046)完成。
+Windows、Linux 同价，已购版本永久使用，90 天安装与缺陷支持。可以先把 5 张实拍图发给我们免费帮测；开发版买后 7 天内读不出你的样图，全额退款。源码买断、OEM 请联系洽谈。暂不提供发票。下单在[淘宝](https://item.taobao.com/item.htm?id=1094008438046)完成。
 
 ## 测试图
 
